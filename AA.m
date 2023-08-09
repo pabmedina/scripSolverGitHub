@@ -12,4 +12,4 @@ for i = 1:3
     i
 end
 
-char1 = 'string1';
+char1 = 'string1878';
