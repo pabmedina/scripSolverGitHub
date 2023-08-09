@@ -2,7 +2,7 @@ clc;close all; format shortg;
 setBiot = 0.7; setPropante = true;
 poroElasticity = true; checkFaces = false; isipKC = true; flagPreCierre =false; gapPreCierre = 1; flagCierre = false; gapCierre =3e-1; 
 meshCase = 'DFN'; %'WI';% 'DFN';%
-KeyInicioIsip=1;
+KeyInicioIsip=false;
 permFactor=1e5; keyAgusCheck = false;
 %-------------------------------------------------------------------------%
 %% %%%%%%%%%%%%%%%%%%%       main DFIT/TShape       %%%%%%%%%%%%%%%%%%%% %%
@@ -53,7 +53,7 @@ end
 meshInfo = meshVerification(meshInfo);
 
 
-if ~keyAgusCheck
+if ~keyAgusCheck && strcmpi(meshCase,'DFN')
     % esta parte la tiene que arreglar Agus con el mallador
     % colocamos una keyAgusCheck = false; 
 
@@ -234,7 +234,7 @@ SP = sparse(paramDiscEle.nDofTot_P,paramDiscEle.nDofTot_P); % Tensor de storativ
 
 %-- Solidos. (Para borde de fractura con y sin interseccion). 
 % [ CTFrac ,nCREqFrac ] = getCTFrac(paramDiscEle.nodeDofs,meshInfo.constraintsRelations,algorithmProperties.precondCT,paramDiscEle.nDofTot_U);
-[ CTFrac ,nCREqFrac ] = getCTFracNormalPromedioHardCodeado(paramDiscEle.nodeDofs,meshInfo.constraintsRelations,algorithmProperties.precondCT,paramDiscEle.nDofTot_U,meshInfo);
+[ CTFrac ,nCREqFrac ] = getCTFracNormalPromedioHardCodeado(paramDiscEle.nodeDofs,meshInfo.constraintsRelations,algorithmProperties.precondCT,paramDiscEle.nDofTot_U,meshInfo); % esto hay que revisar algo para la DFN
 %-- Juntado de Constraints.
 zerosCTFluidosU = sparse(paramDiscEle.nDofTot_U,nCREqFluidos);
 zerosCTFracP    = sparse(paramDiscEle.nDofTot_P,nCREqFrac);
@@ -352,10 +352,10 @@ end
 
 
 while algorithmProperties.elapsedTime <= temporalProperties.tiempoTotalCorrida
-        %% Activacion de propantes luego de la fractura. 
-        % Parte adaptada del codigo de multiples fracturas a este. Poreso
-        % hay referencias a muchas fracturas y otros comentarios al
-        % respecto. 
+    %% Activacion de propantes luego de la fractura.
+    % Parte adaptada del codigo de multiples fracturas a este. Poreso
+    % hay referencias a muchas fracturas y otros comentarios al
+    % respecto.
         
     if algorithmProperties.elapsedTime >= temporalProperties.tInicioISIP && iProp == 1 && strcmpi(propanteProperties.Key,'Y')
         iProp = 0;        
@@ -463,7 +463,7 @@ while algorithmProperties.elapsedTime <= temporalProperties.tiempoTotalCorrida
 
         if KeyInicioIsip
             
-            KeyInicioIsip=0; %% Aca vamos a generar la Curva y desp usamos esa
+            KeyInicioIsip=false; %% Aca vamos a generar la Curva y desp usamos esa
             calcTensionesenInicioISIP 
             calcTensionesenDrainTimes
             DeltaPHidro=abs(abs(tensionHidroDrainTimes(Elem))-abs(tensionHidroInicioIsip(Elem))); %% diferencia de tensionesH entre el itime 2 y donde arranca el Isip
@@ -472,7 +472,6 @@ while algorithmProperties.elapsedTime <= temporalProperties.tiempoTotalCorrida
             calcTensionesenISIP
             
             ImproveFactor=permFactor+(1-permFactor/DeltaPHidro)*(tensionHidroDrainTimes-tensionHidroIsip').*((tensionHidroDrainTimes-tensionHidroIsip')>0);
-        
             ImproveFactor=(ImproveFactor>1).*ImproveFactor+(ImproveFactor<1).*1;
 %            improvePerm=physicalProperties.fluidoPoral.kappaIntShale;
            
