@@ -7,3 +7,7 @@ disp('prueba1')
 disp('prueba2')
 
 disp('test3')
+
+for i = 1:3
+    i
+end
