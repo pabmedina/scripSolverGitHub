@@ -11,3 +11,4 @@ disp('test3')
 for i = 1:3
     i
 end
+strg = 'string1';
