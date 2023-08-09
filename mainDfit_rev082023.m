@@ -76,11 +76,9 @@ if ~keyAgusCheck
 end
 
 if ~keyAgusCheck
-    vec = testingMesh(meshInfo.elements,meshInfo.nodes);
+    vec = testingMesh(meshInfo.elements,meshInfo.nodes); % isempty(find(vec)) = true -> esto esta de mas y ya esta arreglado en el mallador.
 end
-% meshInfo.nodes(vec,:) = []; 
-% [a,b] = ismember(meshInfo.elements,4525);
-% meshInfo.elements(find(b)) = 4524;
+
 %-------------------------------------------------------------------------%
 %%%                         INPUTS y PROPERTIES                         %%%
 %-------------------------------------------------------------------------%
@@ -125,13 +123,15 @@ filterOverContrainedBorde(meshInfo.constraintsRelations(:,[2 3])) = true;      %
 nodesToRemove               = cara.oeste & filterOverContrainedBorde;      % quedar pegados a la fractura, entonces voy a estar pidiendo simetria y
 cara.oeste(nodesToRemove)   = false;                                      % al mismo tiempo pidiendo contraints.
 
-switch meshCase
-    case 'DFIT'
-        meshInfo.constraintsRelations = normalConstraintsDFITHardCodeado(meshInfo.constraintsRelations,meshInfo.nodosBoundary);
-    case 'WI'
-        meshInfo.constraintsRelations = normalConstraintsWIHardCodeado(meshInfo.constraintsRelations,meshInfo.nodosBoundary);
-    case 'DFN'
-        meshInfo.constraintsRelations = normalConstraintsDFN(meshInfo.constraintsRelations,meshInfo.nodosBoundary);
+if ~keyAgusCheck % -> hardcodeo para parchar el mallador.
+    switch meshCase
+        case 'DFIT'
+            meshInfo.constraintsRelations = normalConstraintsDFITHardCodeado(meshInfo.constraintsRelations,meshInfo.nodosBoundary);
+        case 'WI'
+            meshInfo.constraintsRelations = normalConstraintsWIHardCodeado(meshInfo.constraintsRelations,meshInfo.nodosBoundary);
+        case 'DFN'
+            meshInfo.constraintsRelations = meshInfo.constraintsRelations; % normalConstraintsDFN(meshInfo.constraintsRelations,meshInfo.nodosBoundary);
+    end
 end
 
 plotOverCT(meshInfo,'on',nodesToRemove)
