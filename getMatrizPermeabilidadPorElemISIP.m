@@ -58,13 +58,12 @@ switch type
         
         
         for iEle = 1:nElements
-%             if any(iEle == SRVProperties.elementsIndex) Ahora deja de
-%             existir el srv
-                Kperm{iEle}        = repmat(physicalProperties.fluidoPoral.kappaS.*improvePerm(iEle).*eye(3,3), [1, 1, 8]);
-                
-                KpermPlotH(iEle,:) = Kperm{iEle}(1,1);
-                KpermPlotV(iEle,:) = Kperm{iEle}(3,3);
-%             end
+
+            Kperm{iEle}        = repmat(physicalProperties.fluidoPoral.kappaS.*improvePerm(iEle).*eye(3,3), [1, 1, 8]);
+            
+            KpermPlotH(iEle,:) = Kperm{iEle}(1,1);
+            KpermPlotV(iEle,:) = Kperm{iEle}(3,3);
+
         end
 end
 if strcmpi(key,'Y') && ~strcmpi(type,'single') % Plot para verificar los valores de permeabilidad en el dominio. 

@@ -3,6 +3,7 @@ setBiot = 0.7; setPropante = true;
 poroElasticity = true; checkFaces = false; isipKC = true; flagPreCierre =false; gapPreCierre = 1; flagCierre = false; gapCierre =3e-1; 
 meshCase = 'DFN'; %'WI';% 'DFN';%
 KeyInicioIsip=false;
+wantBuffPermeability = false; % false: la permeabilidad no se altera con el campo de tensiones de la etapa de fractura.
 permFactor=1e5; keyAgusCheck = false;
 %-------------------------------------------------------------------------%
 %% %%%%%%%%%%%%%%%%%%%       main DFIT/TShape       %%%%%%%%%%%%%%%%%%%% %%
@@ -471,8 +472,12 @@ while algorithmProperties.elapsedTime <= temporalProperties.tiempoTotalCorrida
         end
             calcTensionesenISIP
             
-            ImproveFactor=permFactor+(1-permFactor/DeltaPHidro)*(tensionHidroDrainTimes-tensionHidroIsip').*((tensionHidroDrainTimes-tensionHidroIsip')>0);
-            ImproveFactor=(ImproveFactor>1).*ImproveFactor+(ImproveFactor<1).*1;
+            if wantBuffPermeability
+                ImproveFactor=permFactor+(1-permFactor/DeltaPHidro)*(tensionHidroDrainTimes-tensionHidroIsip').*((tensionHidroDrainTimes-tensionHidroIsip')>0);
+                ImproveFactor=(ImproveFactor>1).*ImproveFactor+(ImproveFactor<1).*1;
+            else
+                ImproveFactor = 1;
+            end
 %            improvePerm=physicalProperties.fluidoPoral.kappaIntShale;
            
             Kperm        = getMatrizPermeabilidadPorElemISIP(physicalProperties,meshInfo,SRVProperties,ImproveFactor,'ISIP','N' );
