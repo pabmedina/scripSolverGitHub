@@ -9,9 +9,6 @@ KpermGP_SRV = physicalProperties.fluidoPoral.kappaSRV*eye(3,3);
 % barreras con la opcion "double".
 
 
-
-
-
 switch type
     case 'drain' 
         Kperm{1}  = repmat(1.108988764044944*eye(3,3),1,1,8);

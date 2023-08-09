@@ -701,10 +701,6 @@ while algorithmProperties.elapsedTime <= temporalProperties.tiempoTotalCorrida
             errorRelP{iTime}(1,nIter) = norm(pITER - pPrevITER ) / norm(pITER);
             errorRelCohesivos{iTime}(1,nIter) = norm(dN - dNPrevITER_Error) / norm(dN);
 
-%             errorRelU{iTime}(1,nIter) = norm(uITER - uPrevITER );
-%             errorRelP{iTime}(1,nIter) = norm(pITER - pPrevITER );
-%             errorRelCohesivos{iTime}(1,nIter) = norm(dN - dNPrevITER_Error);
-
             if keyPlots == true
                 figure(han1)
                 set(han1,'Position',[1 41 768 748.8]);
@@ -842,6 +838,19 @@ while algorithmProperties.elapsedTime <= temporalProperties.tiempoTotalCorrida
     %% ACTUALIZACION DE VECTORES DE PROPAGACIÓN %%
     
     nodosMuertos             = reshape(meshInfo.elementsBarra.ALL(unique(meshInfo.cohesivos.relatedEB(logical(meshInfo.cohesivos.deadFlag))),:),[],1);
+    % aca tengo que fijarme si de los nodos muertos alguno es un nodo de la
+    % interseccion y adicionarle que mate a todos los nodos cohesivos de
+    % los elementos que contengan este nodo interseccion
+    if ismember(find(nodTripleEncuentro),nodosMuertos) && ~keyAgusCheck
+        disp('LCDTMAllBoys')
+        % hay que sacarlo -> pero es un beta para ver la propagacion en el
+        % encuentro. Va a entrar a este "if" si se rompe un nodo de la
+        % triple interseccion. Aca no hay que sacar el keyAgus. Pero
+        % arreglando lo del mallador deberian cambiar de nombre alguna
+        % estructura. 
+    end
+    [nodosMuertos, meshInfo.cohesivos] = fcnDeadGathering(meshInfo.cohesivos,nodosMuertos,nodTripleEncuentro);
+    
     deadIntNodes             = ismember(intNodes,nodosMuertos);
     
     if any(deadIntNodes)
