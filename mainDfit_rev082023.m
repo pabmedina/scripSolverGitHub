@@ -870,7 +870,6 @@ while algorithmProperties.elapsedTime <= temporalProperties.tiempoTotalCorrida
     meshInfo.cohesivos.biot(meshInfo.elementsFluidos.activos,:) = 1;
     meshInfo.cohesivos.elementsFluidosActivos                   = meshInfo.elementsFluidos.activos;
     meshInfo.cohesivos.deadFlagTimes(:,:,iTime+1)               = meshInfo.cohesivos.deadFlag;    
-    [flagPreCierre, flagCierre] = fcnShut(flagPreCierre,flagCierre,meshInfo.cohesivos.dNTimes(:,:,iTime),gapPreCierre,gapCierre);
 %     assert(~any(ismember(meshInfo.cohesivos.elements(meshInfo.cohesivos.deadFlag),meshInfo.nodosGendarmes)),['Fractura excede limites. Tiempo de corrida = ',num2str(algorithmProperties.elapsedTime),'s'])
     
     if keyPlots == true
