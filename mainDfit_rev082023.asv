@@ -2,8 +2,9 @@ clc;close all; format shortg;
 setBiot = 0.7; setPropante = true;
 poroElasticity = true; checkFaces = false; isipKC = true; flagPreCierre =false; gapPreCierre = 1; flagCierre = false; gapCierre =3e-1; 
 meshCase = 'DFN'; %'WI';% 'DFN';%
+
 KeyInicioIsip=1;
-permFactor=1e5; keyAgusCheck = false;
+permFactor=1e5;
 %-------------------------------------------------------------------------%
 %% %%%%%%%%%%%%%%%%%%%       main DFIT/TShape       %%%%%%%%%%%%%%%%%%%% %%
 %-------------------------------------------------------------------------%
@@ -52,11 +53,10 @@ end
 % Verificacion de malla.
 meshInfo = meshVerification(meshInfo);
 
+% esta parte la tiene que arreglar Agus con el mallador
+% colocamos una keyAgusCheck = false; 
 
-if ~keyAgusCheck
-    % esta parte la tiene que arreglar Agus con el mallador
-    % colocamos una keyAgusCheck = false; 
-
+if meshCase = 'DFN' && ~keyAgusCheck
     xInput1 = 1e4; yInput1 = 3e4; zInput1 = 3.4e4; tolFind = 1e-4;
     nodTripleEncuentro = findTriple(meshInfo,xInput1,yInput1,zInput1,tolFind);
     c = ismember(meshInfo.cohesivos.elements,find(nodTripleEncuentro));
@@ -75,9 +75,7 @@ if ~keyAgusCheck
     elCohesiveElementID = find(sum(aa,2)>0);
 end
 
-if ~keyAgusCheck
-    vec = testingMesh(meshInfo.elements,meshInfo.nodes);
-end
+vec = testingMesh(meshInfo.elements,meshInfo.nodes);
 % meshInfo.nodes(vec,:) = []; 
 % [a,b] = ismember(meshInfo.elements,4525);
 % meshInfo.elements(find(b)) = 4524;
