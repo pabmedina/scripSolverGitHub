@@ -1,3 +1,2 @@
 clc
-disp('hello world')
-disp('hola')
+disp('hello pablo si estas leyendo esto se pudo')
