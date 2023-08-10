@@ -4,16 +4,16 @@ poroElasticity = true; checkFaces = false; isipKC = true; flagPreCierre =false; 
 meshCase = 'DFN'; %'WI';% 'DFN';%
 KeyInicioIsip=false;
 wantBuffPermeability = false; % false: la permeabilidad no se altera con el campo de tensiones de la etapa de fractura.
-permFactor=1e5; keyAgusCheck = false;
+permFactor=1e5; keyAgusCheck = false; factor =1;
 %-------------------------------------------------------------------------%
 %% %%%%%%%%%%%%%%%%%%%       main DFIT/TShape       %%%%%%%%%%%%%%%%%%%% %%
 %-------------------------------------------------------------------------%
 %% Variables a modificar segun lo requerido en cada corrida:
 % Variables de inicio de corrida.
-guardarCorrida    = 'N'; % Si se quiere guardar la corrida. "Y" o "N".
+guardarCorrida    = 'Y'; % Si se quiere guardar la corrida. "Y" o "N".
 pathAdder
 direccionGuardado = 'D:\Geomec\paper DFN\ITBA\Piloto\DFIT\Resultados de corridas (.mat)\'; % Direccion donde se guarda la informacion.
-nombreCorrida     = 'DFIT_tripleEncuentro'; % Nombre de la corrida. La corrida se guarda en la carpeta "Resultado de corridas" en una subcarpeta con este nombre.
+nombreCorrida     = 'DFIT_tripleEncuentroBorrar'; % Nombre de la corrida. La corrida se guarda en la carpeta "Resultado de corridas" en una subcarpeta con este nombre.
 
 cargaDatos     = 'load'; % Forma en la que se cargan las propiedades de entrada. "load" "test" "default" "change".
 archivoLectura = 'DFITtripleEncuentro_rev082023.txt';%'DFIT_rev052022_WI062023CorridaCorta.txt';%'DFIT_rev052022_WI+DFN062023CorridaCorta.txt';%'Dfit_rev052022_DFIT_062023.txt'; %'Dfit_rev052022_DFIT_WItrial_062023.txt';% Nombre del archivo con las propiedades de entrada. 
@@ -606,7 +606,7 @@ while algorithmProperties.elapsedTime <= temporalProperties.tiempoTotalCorrida
                 He{aux2} = zeros(4,4);
                 aux2     = aux2+1;
             else
-                He{aux2} = HFluidos2D(meshInfo.elementsFluidos,iEle,hhIter(meshInfo.nodosFluidos.EB_Asociados,1),physicalProperties.fluidoFracturante.MU,meshInfo.cohesivos,meshInfo.nodes,cohesivosProperties.angDilatancy);
+                He{aux2} = HFluidos2DV2(meshInfo.elementsFluidos,iEle,hhIter(meshInfo.nodosFluidos.EB_Asociados,1),physicalProperties.fluidoFracturante.MU,meshInfo.cohesivos,meshInfo.nodes,cohesivosProperties.angDilatancy,factor);
                 aux2     = aux2+1;
             end
         end
@@ -841,7 +841,7 @@ while algorithmProperties.elapsedTime <= temporalProperties.tiempoTotalCorrida
     % aca tengo que fijarme si de los nodos muertos alguno es un nodo de la
     % interseccion y adicionarle que mate a todos los nodos cohesivos de
     % los elementos que contengan este nodo interseccion
-    if ismember(find(nodTripleEncuentro),nodosMuertos) && ~keyAgusCheck
+    if any(ismember(find(nodTripleEncuentro),nodosMuertos)) && ~keyAgusCheck
         disp('LCDTMAllBoys')
         % hay que sacarlo -> pero es un beta para ver la propagacion en el
         % encuentro. Va a entrar a este "if" si se rompe un nodo de la
@@ -894,43 +894,7 @@ while algorithmProperties.elapsedTime <= temporalProperties.tiempoTotalCorrida
         daspect([1 1 1])
         title(['iTime: ',num2str(iTime)])
         drawnow
-% subplot(1,3,1)
-%         bandplot(meshInfo.cohesivos.elements,meshInfo.nodes,meshInfo.cohesivos.dNTimes(:,:,iTime))
-%         axis square
-%         view(-45,20)
-%         daspect([1 1 1])
-%         hold on
-%         scatter3(meshInfo.nodes(nodosMuertos,1),meshInfo.nodes(nodosMuertos,2),meshInfo.nodes(nodosMuertos,3),'r')
-%         title(['iTime: ',num2str(iTime)])
-% 
-% 
-%         subplot(1,3,2)
-%         bandplot(meshInfo.cohesivos.elements,meshInfo.nodes,meshInfo.cohesivos.dS1Times(:,:,iTime))
-%         axis square
-%         view(-45,20)
-%         daspect([1 1 1])
-%         hold on
-%         scatter3(meshInfo.nodes(nodosMuertos,1),meshInfo.nodes(nodosMuertos,2),meshInfo.nodes(nodosMuertos,3),'r')
-%         title(['iTime: ',num2str(iTime)])
-%   
-% 
-%         subplot(1,3,3)
-%         bandplot(meshInfo.cohesivos.elements,meshInfo.nodes,meshInfo.cohesivos.dS2Times(:,:,iTime))
-%         axis square
-%         view(-45,20)
-%         daspect([1 1 1])
-%         hold on
-%         scatter3(meshInfo.nodes(nodosMuertos,1),meshInfo.nodes(nodosMuertos,2),meshInfo.nodes(nodosMuertos,3),'r')
-%         title(['iTime: ',num2str(iTime)])
-%         drawnow
-%         
-%         figure
-%         nodosDesplazados = meshInfo.nodes + reshape(dTimes(1:paramDiscEle.nDofTot_U,1),3,[])'*1000;
-%         plotMeshColo3D(meshInfo.nodes,meshInfo.elements,meshInfo.cohesivos.elements,'off','on','w',[.95 .95 .95],[.95 .95 .95],0.2)
-%         plotMeshColo3D(nodosDesplazados,meshInfo.elements,meshInfo.cohesivos.elements,'off','on','w','r','k',0.2)
-        
-        
-        
+  
         
     end
     % Indica el final de la operacion.
@@ -964,32 +928,31 @@ end
 %-------------------------------------------------------------------------%
 if strcmpi(guardarCorrida,'Y')
     clear han1 han2
-    cd('D:\Corridas\Paper geomec DFN\Santi\DFIT 7 del 23\Resultados de corridas (.mat)')
+    cd('D:\Geomec\paper DFN\ITBA\Piloto\DFIT\Resultados de corridas (.mat)\')
     mkdir(nombreCorrida) % Crea una subcarpeta en Resultado de corridas donde se guardara la informacion obtenida.
     cd([direccionGuardado,nombreCorrida])
     save(['resultadosCorrida_',nombreCorrida,'.mat']);    % Se guarda la informacion obtenida.
     guardarPropiedades(archivoLectura,nombreCorrida)
     guardarTXT
     fclose('all');
-    
-    
+
 %     movefile(['propiedades_',nombreCorrida,'.txt'],[direccionGuardado,nombreCorrida]);
 %     movefile(['tiempo_',nombreCorrida,'.txt'],[direccionGuardado,nombreCorrida]);
 %     movefile(['presion_',nombreCorrida,'.txt'],[direccionGuardado,nombreCorrida]);
 %     movefile(['Q_',nombreCorrida,'.txt'],[direccionGuardado,nombreCorrida]);
-%     
+    
     if exist(['resultadosFinISIP_',nombreCorrida,'.mat'],'file') == 2
-        cd('D:\Corridas\Paper geomec DFN\Santi\DFIT 7 del 23\scriptSolver')
+        cd('D:\Geomec\paper DFN\ITBA\Piloto\DFIT\scriptSolverGitHub\')
         movefile(['resultadosFinISIP_',nombreCorrida,'.mat'],[direccionGuardado,nombreCorrida]);
     end
     if exist(['resultadosFinFractura_',nombreCorrida,'.mat'],'file') == 2
-        cd('D:\Corridas\Paper geomec DFN\Santi\DFIT 7 del 23\scriptSolver')
+        cd('D:\Geomec\paper DFN\ITBA\Piloto\DFIT\scriptSolverGitHub\')
         movefile(['resultadosFinFractura_',nombreCorrida,'.mat'],[direccionGuardado,nombreCorrida]);
     end
     
     if ~isempty(tSaveParcial)
         for i = 1:numel(tSaveParcial)
-            cd('D:\Corridas\Paper geomec DFN\Santi\DFIT 7 del 23\scriptSolver')
+            cd('D:\Geomec\paper DFN\ITBA\Piloto\DFIT\scriptSolverGitHub\')
             movefile(['resultadosPARCIALESCorrida_',nombreCorrida,'_numero_',num2str(i),'.mat'],[direccionGuardado,nombreCorrida]);
         end
     end

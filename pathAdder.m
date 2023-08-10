@@ -20,4 +20,4 @@ addpath(str3);
 addpath(str5);
 addpath(str6);
 addpath(DirActual)
-cd('D:\Geomec\paper DFN\ITBA\Piloto\DFIT\scriptSolver')
+cd('D:\Geomec\paper DFN\ITBA\Piloto\DFIT\scriptSolverGitHub')
