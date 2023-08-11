@@ -1,7 +1,7 @@
 function [ Kperm ] = getMatrizPermeabilidadPorElemISIP(physicalProperties,meshInfo,SRVProperties,improvePerm,type,key )
 KpermGP_S   = physicalProperties.fluidoPoral.kappaS*eye(3,3);
 KpermGP_L   = [physicalProperties.fluidoPoral.kappaLH*eye(2,3);physicalProperties.fluidoPoral.kappaLV*fliplr(eye(1,3))];
-KpermGP_ISIP   = improvePerm*KpermGP_S; %No se usa este valor
+% KpermGP_ISIP   = improvePerm*KpermGP_S; %No se usa este valor
 KpermGP_SRV = physicalProperties.fluidoPoral.kappaSRV*eye(3,3);
 % La opcion "single" sirve para tener menos drain times dando un valor
 % grande (arbitrario 2mD) de permeabilidad a todo el dominio. Una vez 
@@ -52,10 +52,8 @@ switch type
         KpermPlotH = physicalProperties.fluidoPoral.kappaS*ones(size(meshInfo.elements));
         KpermPlotV = physicalProperties.fluidoPoral.kappaS*ones(size(meshInfo.elements));
         
-        
-        
         for iEle = 1:nElements
-            Kperm{iEle}        = repmat(KpermGP_ISIP,1,1,8);
+            Kperm{iEle}        = repmat(physicalProperties.fluidoPoral.kappaS.*improvePerm(iEle).*eye(3,3), [1, 1, 8]);
             KpermPlotH(iEle,:) = Kperm{iEle}(1,1);
             KpermPlotV(iEle,:) = Kperm{iEle}(3,3);
 
