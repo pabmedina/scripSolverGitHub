@@ -10,10 +10,12 @@ permFactor=1e5; keyAgusCheck = false; factor =1;
 %-------------------------------------------------------------------------%
 %% Variables a modificar segun lo requerido en cada corrida:
 % Variables de inicio de corrida.
-guardarCorrida    = 'N'; % Si se quiere guardar la corrida. "Y" o "N".
+guardarCorrida    = 'Y'; % Si se quiere guardar la corrida. "Y" o "N".
 pathAdder
-direccionGuardado = 'D:\Geomec\paper DFN\ITBA\Piloto\DFIT\Resultados de corridas (.mat)\'; % Direccion donde se guarda la informacion.
-nombreCorrida     = 'DFIT_tripleEncuentro'; % Nombre de la corrida. La corrida se guarda en la carpeta "Resultado de corridas" en una subcarpeta con este nombre.
+direccionGuardado = 'D:\Geomec\paper DFN\ITBA\Piloto\DFIT\Resultados de corridas (.mat)\'; 
+
+% Direccion donde se guarda la informacion.
+nombreCorrida     = 'DFIT_tripleEncuentroBorrar'; % Nombre de la corrida. La corrida se guarda en la carpeta "Resultado de corridas" en una subcarpeta con este nombre.
 
 cargaDatos     = 'load'; % Forma en la que se cargan las propiedades de entrada. "load" "test" "default" "change".
 archivoLectura = 'DFITtripleEncuentro_rev082023.txt';%'DFIT_rev052022_WI062023CorridaCorta.txt';%'DFIT_rev052022_WI+DFN062023CorridaCorta.txt';%'Dfit_rev052022_DFIT_062023.txt'; %'Dfit_rev052022_DFIT_WItrial_062023.txt';% Nombre del archivo con las propiedades de entrada. 
@@ -936,23 +938,23 @@ if strcmpi(guardarCorrida,'Y')
     guardarTXT
     fclose('all');
 
-    movefile(['propiedades_',nombreCorrida,'.txt'],[direccionGuardado,nombreCorrida]);
-    movefile(['tiempo_',nombreCorrida,'.txt'],[direccionGuardado,nombreCorrida]);
-    movefile(['presion_',nombreCorrida,'.txt'],[direccionGuardado,nombreCorrida]);
-    movefile(['Q_',nombreCorrida,'.txt'],[direccionGuardado,nombreCorrida]);
+%     movefile(['propiedades_',nombreCorrida,'.txt'],[direccionGuardado,nombreCorrida]);
+%     movefile(['tiempo_',nombreCorrida,'.txt'],[direccionGuardado,nombreCorrida]);
+%     movefile(['presion_',nombreCorrida,'.txt'],[direccionGuardado,nombreCorrida]);
+%     movefile(['Q_',nombreCorrida,'.txt'],[direccionGuardado,nombreCorrida]);
     
     if exist(['resultadosFinISIP_',nombreCorrida,'.mat'],'file') == 2
-        cd('D:\Geomec\paper DFN\ITBA\Piloto\DFIT\scriptSolver\')
+        cd('D:\Geomec\paper DFN\ITBA\Piloto\DFIT\scriptSolverGitHub\')
         movefile(['resultadosFinISIP_',nombreCorrida,'.mat'],[direccionGuardado,nombreCorrida]);
     end
     if exist(['resultadosFinFractura_',nombreCorrida,'.mat'],'file') == 2
-        cd('D:\Geomec\paper DFN\ITBA\Piloto\DFIT\scriptSolver\')
+        cd('D:\Geomec\paper DFN\ITBA\Piloto\DFIT\scriptSolverGitHub\')
         movefile(['resultadosFinFractura_',nombreCorrida,'.mat'],[direccionGuardado,nombreCorrida]);
     end
     
     if ~isempty(tSaveParcial)
         for i = 1:numel(tSaveParcial)
-            cd('D:\Geomec\paper DFN\ITBA\Piloto\DFIT\scriptSolver\')
+            cd('D:\Geomec\paper DFN\ITBA\Piloto\DFIT\scriptSolverGitHub\')
             movefile(['resultadosPARCIALESCorrida_',nombreCorrida,'_numero_',num2str(i),'.mat'],[direccionGuardado,nombreCorrida]);
         end
     end
