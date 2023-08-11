@@ -3,14 +3,14 @@ setBiot = 0.7; setPropante = true;
 poroElasticity = true; checkFaces = false; isipKC = true; flagPreCierre =false; gapPreCierre = 1; flagCierre = false; gapCierre =3e-1; 
 meshCase = 'DFN'; %'WI';% 'DFN';%
 KeyInicioIsip=true;
-wantBuffPermeability = true; % false: la permeabilidad no se altera con el campo de tensiones de la etapa de fractura.
+wantBuffPermeability = false; % false: la permeabilidad no se altera con el campo de tensiones de la etapa de fractura.
 permFactor=1e5; keyAgusCheck = false; factor =1;
 %-------------------------------------------------------------------------%
 %% %%%%%%%%%%%%%%%%%%%       main DFIT/TShape       %%%%%%%%%%%%%%%%%%%% %%
 %-------------------------------------------------------------------------%
 %% Variables a modificar segun lo requerido en cada corrida:
 % Variables de inicio de corrida.
-guardarCorrida    = 'N'; % Si se quiere guardar la corrida. "Y" o "N".
+guardarCorrida    = 'Y'; % Si se quiere guardar la corrida. "Y" o "N".
 pathAdder
 direccionGuardado = 'D:\Geomec\paper DFN\ITBA\Piloto\DFIT\Resultados de corridas (.mat)\'; % Direccion donde se guarda la informacion.
 nombreCorrida     = 'DFIT_tripleEncuentroCorte'; % Nombre de la corrida. La corrida se guarda en la carpeta "Resultado de corridas" en una subcarpeta con este nombre.
