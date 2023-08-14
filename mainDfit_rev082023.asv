@@ -12,8 +12,8 @@ permFactor=1e5; keyAgusCheck = false; factor =1;
 % Variables de inicio de corrida.
 guardarCorrida    = 'Y'; % Si se quiere guardar la corrida. "Y" o "N".
 pathAdder
-direccionGuardado = 'D:\Geomec\paper DFN\ITBA\Piloto\DFIT\Resultados de corridas (.mat)\'; 
-
+% direccionGuardado = 'D:\Geomec\paper DFN\ITBA\Piloto\DFIT\Resultados de corridas (.mat)\';   %Dejo ambos directorios, ir comentando segun quien la use 
+direccionGuardado = 'D:\Corridas\Paper geomec DFN\Santi\DFIT 7 del 23\Resultados de corridas (.mat)\'; 
 % Direccion donde se guarda la informacion.
 nombreCorrida     = 'DFIT_tripleEncuentroBorrar'; % Nombre de la corrida. La corrida se guarda en la carpeta "Resultado de corridas" en una subcarpeta con este nombre.
 
@@ -944,11 +944,11 @@ if strcmpi(guardarCorrida,'Y')
 %     movefile(['Q_',nombreCorrida,'.txt'],[direccionGuardado,nombreCorrida]);
     
     if exist(['resultadosFinISIP_',nombreCorrida,'.mat'],'file') == 2
-        cd('D:\Geomec\paper DFN\ITBA\Piloto\DFIT\scriptSolverGitHub\')
+        cd([DirectorioMadre 'scriptSolverGitHub\'])
         movefile(['resultadosFinISIP_',nombreCorrida,'.mat'],[direccionGuardado,nombreCorrida]);
     end
     if exist(['resultadosFinFractura_',nombreCorrida,'.mat'],'file') == 2
-        cd('D:\Geomec\paper DFN\ITBA\Piloto\DFIT\scriptSolverGitHub\')
+        cd('D:\Geomec\paper DFN\ITBA\Piloto\DFIT\scripSolverGitHub\')
         movefile(['resultadosFinFractura_',nombreCorrida,'.mat'],[direccionGuardado,nombreCorrida]);
     end
     

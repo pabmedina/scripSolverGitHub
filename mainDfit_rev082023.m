@@ -190,12 +190,12 @@ initialSressExtS = [physicalProperties.cargasTectonicas.ShX
                     physicalProperties.cargasTectonicas.TauYZ
                     physicalProperties.cargasTectonicas.TauXZ]*0;   
                 
-initialStrainExtS = [-6e-4
-                     -1.5e-4
-                     -2e-3
-                      0
-                      0
-                      0];
+    initialStrainExtS = [-6e-4
+                         -1.5e-4
+                         -2e-3
+                          0
+                          0
+                          0];
                   
 initialSressExtL = [physicalProperties.cargasTectonicas.ShXL
                     physicalProperties.cargasTectonicas.ShYL
@@ -930,7 +930,7 @@ end
 %-------------------------------------------------------------------------%
 if strcmpi(guardarCorrida,'Y')
     clear han1 han2
-    cd('D:\Geomec\paper DFN\ITBA\Piloto\DFIT\Resultados de corridas (.mat)\')
+    cd(direccionGuardado)
     mkdir(nombreCorrida) % Crea una subcarpeta en Resultado de corridas donde se guardara la informacion obtenida.
     cd([direccionGuardado,nombreCorrida])
     save(['resultadosCorrida_',nombreCorrida,'.mat']);    % Se guarda la informacion obtenida.
@@ -944,17 +944,17 @@ if strcmpi(guardarCorrida,'Y')
 %     movefile(['Q_',nombreCorrida,'.txt'],[direccionGuardado,nombreCorrida]);
     
     if exist(['resultadosFinISIP_',nombreCorrida,'.mat'],'file') == 2
-        cd('D:\Geomec\paper DFN\ITBA\Piloto\DFIT\scriptSolverGitHub\')
+        cd([DirectorioMadre 'scripSolverGitHub\'])
         movefile(['resultadosFinISIP_',nombreCorrida,'.mat'],[direccionGuardado,nombreCorrida]);
     end
     if exist(['resultadosFinFractura_',nombreCorrida,'.mat'],'file') == 2
-        cd('D:\Geomec\paper DFN\ITBA\Piloto\DFIT\scriptSolverGitHub\')
+        cd([DirectorioMadre 'scripSolverGitHub\'])
         movefile(['resultadosFinFractura_',nombreCorrida,'.mat'],[direccionGuardado,nombreCorrida]);
     end
     
     if ~isempty(tSaveParcial)
         for i = 1:numel(tSaveParcial)
-            cd('D:\Geomec\paper DFN\ITBA\Piloto\DFIT\scriptSolverGitHub\')
+            cd([DirectorioMadre 'scripSolverGitHub\'])
             movefile(['resultadosPARCIALESCorrida_',nombreCorrida,'_numero_',num2str(i),'.mat'],[direccionGuardado,nombreCorrida]);
         end
     end
