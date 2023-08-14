@@ -478,7 +478,7 @@ while algorithmProperties.elapsedTime <= temporalProperties.tiempoTotalCorrida
                 ImproveFactor=permFactor+(1-permFactor/DeltaPHidro)*(tensionHidroDrainTimes-tensionHidroIsip').*((tensionHidroDrainTimes-tensionHidroIsip')>0);
                 ImproveFactor=(ImproveFactor>1).*ImproveFactor+(ImproveFactor<1).*1;
             else
-                ImproveFactor = 1;
+                ImproveFactor = ones(size(meshInfo.elements,1),1);
             end
 %            improvePerm=physicalProperties.fluidoPoral.kappaIntShale;
            
