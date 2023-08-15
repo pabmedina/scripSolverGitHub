@@ -10,6 +10,6 @@ strain0(1:2,:)=[-6 -5 -4 -3 -2 -1.5;
             
 for i=1:nCasos
      initialStrainExtS=strain0(:,i);
-     nombreCorrida=['DFN_Angle_github_prueba_' num2str(i)];
+     nombreCorrida=['DFN_Angle_github_' num2str(i)];
      mainDfit_rev082023_variosInitialStrain
 end
